@@ -9,6 +9,7 @@ import android.graphics.Point;
 import android.graphics.Rect;
 import android.net.Uri;
 import android.provider.MediaStore;
+import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -100,7 +101,12 @@ public class CropActivity extends AppCompatActivity {
             }
         } else {
             Intent startCameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-            startCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(tempFile));
+            Uri photoUri = FileProvider.getUriForFile(
+                    this,
+                    getPackageName() + ".fileprovider",
+                    tempFile);
+
+            startCameraIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoUri /*Uri.fromFile(tempFile)*/);
             if (startCameraIntent.resolveActivity(getPackageManager()) != null) {
                 startActivityForResult(startCameraIntent, REQUEST_CODE_TAKE_PHOTO);
             }
